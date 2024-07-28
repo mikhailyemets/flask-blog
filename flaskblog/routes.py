@@ -1,4 +1,5 @@
 import secrets, os
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import (
@@ -85,7 +86,13 @@ def save_picture(form_picture):
         "static/profile_pics",
         picture_filename
     )
-    form_picture.save(picture_path)
+
+    #resing big pictures to keep it small
+    output_size = (125,125)
+    input_ = Image.open(form_picture)
+    input_.thumbnail(output_size)
+
+    input_.save(picture_path)
     return picture_filename
 
 
