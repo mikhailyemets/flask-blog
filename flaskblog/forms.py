@@ -1,12 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-from flaskblog.validators import validate_username, validate_email
+from flaskblog.validators import (
+    validate_username,
+    validate_email,
+    update_validation_username,
+    update_validation_email
+)
+
 
 class RegistrationForm(FlaskForm):
     username = StringField(
         "Username",
-        validators=[DataRequired(), Length(min:=2, max=20), validate_username]
+        validators=[DataRequired(), Length(min=2, max=20), validate_username]
     )
     email = StringField(
         "E-mail",
@@ -39,4 +45,18 @@ class LoginForm(FlaskForm):
     )
     submit = SubmitField(
         "Sign in"
+    )
+
+
+class UpdateAccountForm(FlaskForm):
+    username = StringField(
+        "Username",
+        validators=[DataRequired(), Length(min=2, max=20), update_validation_username]
+    )
+    email = StringField(
+        "E-mail",
+        validators=[DataRequired(), Email(), update_validation_email()]
+    )
+    submit = SubmitField(
+        "Update"
     )
