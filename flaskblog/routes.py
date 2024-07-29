@@ -125,7 +125,8 @@ def new_post():
         'create_post.html',
         title='New post',
         form=form,
-        legend="New post"
+        legend="New post",
+        submit="Post"
     )
 
 @app.route("/post/<int:post_id>")
@@ -161,6 +162,17 @@ def update_post(post_id: int):
         "create_post.html",
         title="Update post",
         form=form,
-        legend="Update post"
+        legend="Update post",
+        submit="Update"
     )
 
+@app.route("/post/<int:post_id>/delete", methods=["POST"])
+@login_required
+def delete_post(post_id: int):
+    post = Post.query.get_or_404(post_id)
+    if post.user_id != current_user.id:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash("Post has been deleted!", "success")
+    return redirect(url_for("home"))
