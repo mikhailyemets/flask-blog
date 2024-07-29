@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-  {% for post in posts %}
+  {% for post in posts.items %}
     <article class="media content-section">
       <img
         class="rounded-circle article-img"
@@ -15,5 +15,12 @@
         <p class="article-content">{{ post.content|safe_truncate(200) }}</p>
       </div>
     </article>
+  {% endfor %}
+  {% for page_num in posts.iter_pages() %}
+    {% if page_num %}
+      <a href="{{ url_for('home', page=page_num) }}" class="btn btn-outline-info mb-4 ">{{ page_num }}</a>
+    {% else %}
+      ...
+    {% endif %}
   {% endfor %}
 {% endblock %}
