@@ -18,6 +18,12 @@ def validate_email(form, field):
         raise ValidationError("Email is already taken!")
 
 
+def validate_email_exists(form, field):
+    with app.app_context():
+        user = User.query.filter_by(email=field.data).first()
+    if user is None:
+        raise ValidationError("There is no account with this email ")
+
 def update_validation_username(form, field):
     if field.data != current_user.username:
         with app.app_context():

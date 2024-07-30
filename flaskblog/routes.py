@@ -5,7 +5,10 @@ from flaskblog import app, db, bcrypt
 from flaskblog.forms import (
     RegistrationForm,
     LoginForm,
-    UpdateAccountForm, PostForm
+    UpdateAccountForm,
+    PostForm,
+    RequestResetForm,
+    ResetPaswordForm
 )
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
@@ -189,4 +192,16 @@ def user_posts(username):
         'user_posts.html',
         posts=posts,
         user=user
+    )
+
+
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = RequestResetForm
+    return render_template(
+        'reset_request.html',
+        title="Reset Password",
+        form=form
     )
