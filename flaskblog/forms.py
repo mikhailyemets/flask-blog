@@ -6,7 +6,8 @@ from flaskblog.validators import (
     validate_username,
     validate_email,
     update_validation_username,
-    update_validation_email
+    update_validation_email,
+    validate_email_exists
 )
 
 
@@ -71,3 +72,23 @@ class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Content", validators=[DataRequired()])
     submit = SubmitField("Post")
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField(
+        "E-mail",
+        validators=[DataRequired(), Email(), validate_email_exists]
+    )
+    submit = SubmitField("Request password reset")
+
+
+class ResetPaswordForm(FlaskForm):
+    password = PasswordField(
+        "Password",
+        validators=[DataRequired()]
+    )
+    confirm_password = PasswordField(
+        "Confirm password",
+        validators=[DataRequired(), EqualTo("password")]
+    )
+    submit = SubmitField("Reset password")
