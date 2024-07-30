@@ -1,10 +1,14 @@
+from dotenv import load_dotenv
 import os
+
 from datetime import datetime
-from flaskblog import db, login_manager, app
+from flaskblog import db, login_manager
+from flask import current_app
 from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer as Serializer, \
     SignatureExpired, BadSignature
 
+load_dotenv()
 
 @login_manager.user_loader
 def load_user(user_id: int) -> "User":
@@ -20,12 +24,12 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
-        s = Serializer(os.environ.get("SECRET_KEY"))
+        s = Serializer(os.getenv("SECRET_KEY"))
         return s.dumps({'user_id': self.id})
 
     @staticmethod
     def verify_reset_token(token, expires_sec=1800):
-        s = Serializer(os.environ.get("SECRET_KEY"))
+        s = Serializer(os.getenv("SECRET_KEY"))
         try:
             deserialized_data = s.loads(token, max_age=expires_sec)
             user_id = deserialized_data.get('user_id')
