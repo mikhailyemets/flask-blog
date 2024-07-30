@@ -1,7 +1,8 @@
 import secrets, os
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from flaskblog import app, db, bcrypt
+from flaskblog import app, db, bcrypt, mail
+from flask_mail import Message
 from flaskblog.forms import (
     RegistrationForm,
     LoginForm,
@@ -12,6 +13,7 @@ from flaskblog.forms import (
 )
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
+
 
 
 @app.route("/")
@@ -195,13 +197,51 @@ def user_posts(username):
     )
 
 
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message(
+        "Password reset request",
+        sender="noreply@demo.com",
+        recipients=[user.mail]
+    )
+    msg.body = f"""To reset your password, visit the following link:
+    {url_for("reset_token", token=token, external=True)}
+    
+    If you did not send make this request then simply ignore this mail.
+    """
+
 @app.route("/reset_password", methods=["GET", "POST"])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     form = RequestResetForm
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash("An email has been sent with instructions to reset your passwotd", "info")
+        return redirect(url_for("login"))
     return render_template(
         'reset_request.html',
+        title="Reset Password",
+        form=form
+    )
+
+
+@app.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    user = User.verify_reset_token(token)
+
+    if not user:
+        flash("That is invalid or expired token", "warning")
+        return redirect(url_for("reset_request"))
+
+    form = ResetPaswordForm()
+
+    return render_template(
+        'reset_token.html',
         title="Reset Password",
         form=form
     )

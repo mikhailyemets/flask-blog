@@ -20,12 +20,12 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
-        s = Serializer(os.getenv("SECRET_KEY"))
+        s = Serializer(os.environ.get("SECRET_KEY"))
         return s.dumps({'user_id': self.id})
 
     @staticmethod
     def verify_reset_token(token, expires_sec=1800):
-        s = Serializer(os.getenv("SECRET_KEY"))
+        s = Serializer(os.environ.get("SECRET_KEY"))
         try:
             deserialized_data = s.loads(token, max_age=expires_sec)
             user_id = deserialized_data.get('user_id')
