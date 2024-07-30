@@ -74,3 +74,9 @@ def delete_post(post_id: int):
     db.session.commit()
     flash("Post has been deleted!", "success")
     return redirect(url_for("main.home"))
+
+
+@posts.route('/latest_posts')
+def latest_posts():
+    posts = Post.query.order_by(Post.date_posted.desc()).limit(2).all()
+    return render_template('latest_posts.html', posts=posts)
