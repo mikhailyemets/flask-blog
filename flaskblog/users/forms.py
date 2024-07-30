@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flaskblog.validators import (
     validate_username,
@@ -9,6 +9,8 @@ from flaskblog.validators import (
     update_validation_email,
     validate_email_exists
 )
+from flaskblog.models import User
+from flask_login import current_user
 
 
 class RegistrationForm(FlaskForm):
@@ -53,7 +55,8 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     username = StringField(
         "Username",
-        validators=[DataRequired(), Length(min=2, max=20), update_validation_username]
+        validators=[DataRequired(), Length(min=2, max=20),
+                    update_validation_username]
     )
     email = StringField(
         "E-mail",
@@ -66,12 +69,6 @@ class UpdateAccountForm(FlaskForm):
     submit = SubmitField(
         "Update"
     )
-
-
-class PostForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
-    content = TextAreaField("Content", validators=[DataRequired()])
-    submit = SubmitField("Post")
 
 
 class RequestResetForm(FlaskForm):

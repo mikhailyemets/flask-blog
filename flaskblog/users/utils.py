@@ -1,12 +1,15 @@
 from flask_mail import Message
 from flask import url_for
-from flaskblog import mail
 from flaskblog.models import User
+import os
+import secrets
+from PIL import Image
 
 
 def send_reset_email(user: User) -> None:
+    from flaskblog import mail
     token = user.get_reset_token()
-    reset_url = url_for("reset_token", token=token, _external=True)
+    reset_url = url_for("users.reset_token", token=token, _external=True)
     msg = Message(
         "Password reset request",
         sender="noreply@demo.com",
@@ -17,7 +20,7 @@ def send_reset_email(user: User) -> None:
 
     We received a request to reset your password. You can reset your password by clicking the link below:
 
-    {url_for("reset_token", token=token, external=True)}
+    {url_for("users.reset_token", token=token, external=True)}
 
     If you did not request this password reset, please ignore this email. Your password will not be changed.
 
@@ -32,3 +35,23 @@ def send_reset_email(user: User) -> None:
        <p>Thank you,<br>The FlaskBlog Team</p>
        """
     mail.send(msg)
+
+
+def save_picture(form_picture):
+    from flask import current_app
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_filename = random_hex + f_ext
+    picture_path = os.path.join(
+        current_app.root_path,
+        "static/profile_pics",
+        picture_filename
+    )
+
+    #resing big pictures to keep it small
+    output_size = (125,125)
+    input_ = Image.open(form_picture)
+    input_.thumbnail(output_size)
+
+    input_.save(picture_path)
+    return picture_filename
