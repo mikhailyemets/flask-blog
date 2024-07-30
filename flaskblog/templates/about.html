@@ -1,4 +1,70 @@
 {% extends "layout.html" %}
+
 {% block content %}
-  <h1>About Page</h1>
-{% endblock content%}
+  <div class="container my-5">
+    <!-- About Us Introduction -->
+    <div class="text-center mb-5">
+      <h1 class="display-4">About Us</h1>
+      <p class="lead">Welcome to our blog! We are passionate about sharing knowledge and engaging with our community.</p>
+    </div>
+
+    <!-- Our Mission -->
+    <section class="mb-5">
+      <h2 class="display-5 mb-4">Our Mission</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel libero ut libero suscipit tempor. Nulla facilisi. Vestibulum eget est vitae ante fermentum cursus.</p>
+      <p>Aliquam erat volutpat. Ut nec turpis ut justo condimentum vestibulum a a justo. Suspendisse potenti.</p>
+    </section>
+
+    <!-- Team Section -->
+    <section class="mb-5">
+      <h2 class="display-5 mb-4">Meet Our Team</h2>
+      <div class="row">
+        <!-- Team Member 1 -->
+        <div class="col-md-4 text-center mb-4">
+          <img src="https://via.placeholder.com/150" alt="Team Member 1" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+          <h4>Jane Doe</h4>
+          <p class="text-muted">CEO & Founder</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="col-md-4 text-center mb-4">
+          <img src="https://via.placeholder.com/150" alt="Team Member 2" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+          <h4>John Smith</h4>
+          <p class="text-muted">CTO</p>
+          <p>Phasellus facilisis, libero id consectetur sagittis, dolor purus aliquet mi.</p>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="col-md-4 text-center mb-4">
+          <img src="https://via.placeholder.com/150" alt="Team Member 3" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+          <h4>Emily Johnson</h4>
+          <p class="text-muted">COO</p>
+          <p>Curabitur ut lorem in arcu auctor fermentum non non ligula.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section>
+      <h2 class="display-5 mb-4">Contact Us</h2>
+      <form>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">Message</label>
+          <textarea class="form-control" id="message" rows="4" placeholder="Your Message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+    </section>
+  </div>
+{% endblock %}
